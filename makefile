@@ -46,3 +46,4 @@ clean:
 	rm -rf *.o main
 	rm -rf *.d
 	rm -f run
+	rm -f dbrun
