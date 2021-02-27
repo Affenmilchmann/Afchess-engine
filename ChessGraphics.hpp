@@ -1,19 +1,29 @@
 #include <SFML/Graphics.hpp>
+#include <map>
+#include <vector>
 
 struct Piece {
 	std::string position;
-	sf::Texture texture;
+	//wK wQ wR wB wN wP bK bQ bR bB bN bP
+	std::string type;
+	sf::Sprite sprite;
 };
 
 class ChessGraphics {
     private:
 		sf::RenderWindow main_window;
-		Piece pieces;
-		sf::Image pieces_img;
+		std::vector<Piece> pieces;
+		std::map<std::string, sf::Texture*> piece_textures;
 
-		Piece tmp_p;
-		sf::Texture tmp_tt;
-		sf::Sprite tmp_s;
+		sf::Image pieces_img;
+		sf::Texture board_texture;
+		sf::Sprite board_sprite;
+
+		bool blacks_move;
+
+		void setPosition(std::string fen_string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+		void loadTextures();
+		void drawPieces();
 
 	public:
 		void mainLoop();
