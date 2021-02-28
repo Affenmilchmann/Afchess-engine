@@ -2,7 +2,7 @@
 #include "ChessGraphics.hpp"
 
 int main(){
-    ChessGraphics tst(600);
+    ChessGraphics tst(500);
 
     tst.mainLoop();
 

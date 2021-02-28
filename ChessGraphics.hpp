@@ -1,13 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <vector>
-
-struct Piece {
-	std::string position;
-	//wK wQ wR wB wN wP bK bQ bR bB bN bP
-	std::string type;
-	sf::Sprite sprite;
-};
+#include "Piece.hpp"
 
 class ChessGraphics {
     private:
@@ -24,6 +18,8 @@ class ChessGraphics {
 		void setPosition(std::string fen_string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 		void loadTextures();
 		void drawPieces();
+
+		void draww(sf::RenderWindow *w);
 
 	public:
 		void mainLoop();
