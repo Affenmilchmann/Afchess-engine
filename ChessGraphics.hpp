@@ -2,26 +2,20 @@
 #include <map>
 #include <vector>
 #include "Piece.hpp"
+#include "ChessBoard.hpp"
 
 class ChessGraphics {
     private:
 		sf::RenderWindow main_window;
-		std::vector<Piece> pieces;
-		std::map<std::string, sf::Texture*> piece_textures;
 
-		sf::Image pieces_img;
-		sf::Texture board_texture;
-		sf::Sprite board_sprite;
+		ChessBoard chess_board;
 
-		bool blacks_move;
-
-		void setPosition(std::string fen_string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-		void loadTextures();
-		void drawPieces();
-
-		void draww(sf::RenderWindow *w);
+		void draw();
 
 	public:
+		ChessGraphics(
+			std::string fen_string = "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R", 
+			int size = 500);
+		
 		void mainLoop();
-		ChessGraphics(int size = 500);
 };	
