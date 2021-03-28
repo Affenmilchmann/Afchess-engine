@@ -2,8 +2,6 @@
 #include "math.h"
 #include <iostream>
 
-#pragma once
-
 class Piece {
     private:
         sf::Sprite sprite;

@@ -1,7 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include <map>
 #include <vector>
-#include "Piece.hpp"
 #include "ChessBoard.hpp"
 
 class ChessGraphics {
