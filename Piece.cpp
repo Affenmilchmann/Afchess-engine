@@ -16,9 +16,13 @@ Piece::Piece(std::string type,  sf::Texture *texture, std::string position, bool
 
     //setting sprite coords
     int x = (int)(position[0]) - (int)'a';
-    int y = (int)(position[1]) - (int)'1';
+    int y = 7 - ((int)(position[1]) - (int)'1');
     
     sprite.setPosition(x * sprite_size, y * sprite_size);
+}
+
+bool Piece::isColliding(std::string char_coords) {
+    return char_coords == position;
 }
 
 void Piece::draw(sf::RenderWindow *window) {

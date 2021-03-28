@@ -1,10 +1,26 @@
 #include "ChessBoard.hpp"
 
+ChessBoard::ChessBoard() { blacks_move = false; }
+
 char toUpper(char inp) {
 	return (char)(inp - 32);
 }
 
-ChessBoard::ChessBoard() { blacks_move = false; }
+std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_size) {
+    if (coords.x < 0 || coords.y < 0 || 
+        coords.x > window_size.x || coords.y > window_size.y) {
+            return "Off";
+    }
+
+    char x = 'a' + (8 * coords.x / window_size.x);
+    int y = (8 * coords.y / window_size.y);
+
+    if (!blacks_move) {
+        y = 8 - y;
+    }
+
+    return std::string(1, x) + std::to_string(y);
+}
 
 void ChessBoard::draw(sf::RenderWindow *window) {
     window->draw(board_sprite);
@@ -13,15 +29,33 @@ void ChessBoard::draw(sf::RenderWindow *window) {
 	}
 }
 
+bool ChessBoard::isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {
+    std::string char_coords = getCharCoords(mouse_pos, window_size);
+
+    if (pointed_piece != nullptr)
+        std::cout << "Piece sign: " << pointed_piece->type << "\n";
+
+    for (int i = 0; i < pieces.size(); i++) {
+		if (pieces[i].isColliding(char_coords)) {
+            pointed_piece = &pieces[i];
+            return true;
+        }
+	}
+
+    pointed_piece = nullptr;
+    return false;
+}
+
 void ChessBoard::setPosition(std::string fen_string, float main_window_size) {
-    int curr_row = 0, curr_col = 0;
+    int curr_row = 7, curr_col = 0;
 	int board_size = main_window_size;
 	for (int i = 0; i < (int)fen_string.length(); i++) {
 		std::string position = "a1";
 		std::string type = "ZZ";
 
 		position[0] = (char)((int)'a' + curr_col);
-		position[1] = (char)((int)'1' + curr_row);
+
+        position[1] = (char)((int)'1' + curr_row);
 
 		//white pieces
 		if (fen_string[i] <= 'Z' and fen_string[i] >= 'A') {
@@ -39,7 +73,7 @@ void ChessBoard::setPosition(std::string fen_string, float main_window_size) {
 			continue;
 		}
 		else if (fen_string[i] == '/') {
-			curr_row += 1;
+			curr_row -= 1;
 			curr_col = 0;
 			continue;
 		}
@@ -47,6 +81,8 @@ void ChessBoard::setPosition(std::string fen_string, float main_window_size) {
 		curr_col += 1;
 
 		pieces.push_back(Piece(type, piece_textures[type], position, type[0] == 'w', board_size));
+
+        std::cout << type << "  " << position << "\n";
 	}
 }
 

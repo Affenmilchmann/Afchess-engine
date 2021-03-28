@@ -6,6 +6,12 @@ class ChessGraphics {
     private:
 		sf::RenderWindow main_window;
 
+		sf::Cursor arrow;
+		sf::Cursor hand;
+
+		sf::CircleShape mouse_pos_pointer;
+		sf::Vector2i mouse_pos;
+
 		ChessBoard chess_board;
 
 		void draw();
@@ -16,4 +22,5 @@ class ChessGraphics {
 			int size = 500);
 		
 		void mainLoop();
+		void mouseHandler();
 };	

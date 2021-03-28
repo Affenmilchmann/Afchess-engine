@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include "Piece.hpp"
+#include <iostream>
 
 class ChessBoard {
     private:
@@ -12,6 +13,10 @@ class ChessBoard {
         sf::Texture board_texture;
 		sf::Sprite board_sprite;
 
+        Piece* pointed_piece;
+
+        std::string getCharCoords(sf::Vector2i coords, sf::Vector2u window_size);
+
     public:
         ChessBoard();
 
@@ -20,5 +25,5 @@ class ChessBoard {
         void draw(sf::RenderWindow *window);
         void loadTextures(float main_window_size);
         void setPosition(std::string fen_string, float main_window_size);
-
+        bool isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size);
 };

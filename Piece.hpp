@@ -15,6 +15,7 @@ class Piece {
         std::string type;
 
         void draw(sf::RenderWindow *window);
+        bool isColliding(std::string char_coords);
         std::string getCharCoords();
         sf::Vector2i getNumCoords();
 };
