@@ -23,8 +23,8 @@ void ChessGraphics::mainLoop() {
 	while (main_window.isOpen()) {
 		main_window.clear();
 		
-		draw();
 		mouseHandler();
+		chess_board.mainLoop(&main_window, mouse_pos);
 
 		main_window.display();
 		while (main_window.pollEvent(ev)) {
@@ -32,13 +32,27 @@ void ChessGraphics::mainLoop() {
 				case sf::Event::Closed:
 					main_window.close();
 					break;
+				
+				case sf::Event::MouseButtonPressed:
+					if (ev.mouseButton.button == sf::Mouse::Left) {
+						std::cout << "Right pressed!\n";
+						chess_board.leftButtonPressed();
+					}
+					break;
+
+				case sf::Event::MouseButtonReleased:
+					if (ev.mouseButton.button == sf::Mouse::Left) {
+						std::cout << "Right released!\n";
+						chess_board.leftButtonReleased();
+					}
+					break;
 				}
 			}	
 		}
 }	
 
 void ChessGraphics::draw() {
-	chess_board.draw(&main_window);
+	//chess_board.draw(&main_window);
 }
 
 void ChessGraphics::mouseHandler() {

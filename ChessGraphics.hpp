@@ -18,7 +18,7 @@ class ChessGraphics {
 
 	public:
 		ChessGraphics(
-			std::string fen_string = "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R", 
+			std::string fen_string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", 
 			int size = 500);
 		
 		void mainLoop();

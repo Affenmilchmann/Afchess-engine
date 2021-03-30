@@ -21,6 +21,10 @@ Piece::Piece(std::string type,  sf::Texture *texture, std::string position, bool
     sprite.setPosition(x * sprite_size, y * sprite_size);
 }
 
+void Piece::pieceIsBeingMoved(sf::Vector2i position) {
+    sprite.setPosition(position.x, position.y);
+}
+
 bool Piece::isColliding(std::string char_coords) {
     return char_coords == position;
 }

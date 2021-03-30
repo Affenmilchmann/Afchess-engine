@@ -22,22 +22,43 @@ std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_s
     return std::string(1, x) + std::to_string(y);
 }
 
+void ChessBoard::mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos) {
+	if (is_right_button_pressed && pointed_piece != nullptr) {
+		pointed_piece->pieceIsBeingMoved(mouse_pos);
+	}
+	
+	draw(window);
+}
+
 void ChessBoard::draw(sf::RenderWindow *window) {
+
+
     window->draw(board_sprite);
     for (auto it = pieces.begin(); it != pieces.end(); ++it) {
 		it->draw(window);
 	}
 }
 
-bool ChessBoard::isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {
-    std::string char_coords = getCharCoords(mouse_pos, window_size);
+void ChessBoard::leftButtonPressed() {
+	is_right_button_pressed = true;
+}
 
-    if (pointed_piece != nullptr)
-        std::cout << "Piece sign: " << pointed_piece->type << "\n";
+void ChessBoard::leftButtonReleased() {
+	is_right_button_pressed = false;
+}
+
+bool ChessBoard::isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {
+	if (is_right_button_pressed) 
+		return false;
+
+    std::string char_coords = getCharCoords(mouse_pos, window_size);
 
     for (int i = 0; i < pieces.size(); i++) {
 		if (pieces[i].isColliding(char_coords)) {
-            pointed_piece = &pieces[i];
+			if (pointed_piece != &pieces[i]) {
+            	pointed_piece = &pieces[i];
+				std::cout << "Piece sign: " << pointed_piece->type << "\n";
+			}
             return true;
         }
 	}

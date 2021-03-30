@@ -16,6 +16,8 @@ class Piece {
 
         void draw(sf::RenderWindow *window);
         bool isColliding(std::string char_coords);
+        void pieceIsBeingMoved(sf::Vector2i position);
+
         std::string getCharCoords();
         sf::Vector2i getNumCoords();
 };
