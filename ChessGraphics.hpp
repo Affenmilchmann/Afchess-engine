@@ -19,7 +19,7 @@ class ChessGraphics {
 	public:
 		ChessGraphics(
 			std::string fen_string = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", 
-			int size = 500);
+			sf::Vector2u size = sf::Vector2u(500, 500));
 		
 		void mainLoop();
 		void mouseHandler();

@@ -13,6 +13,7 @@ class ChessBoard {
         sf::Texture board_texture;
 		sf::Sprite board_sprite;
 
+        sf::Vector2u main_window_size;
         Piece* pointed_piece;
 
         bool is_right_button_pressed;
@@ -27,8 +28,9 @@ class ChessBoard {
 
         void mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos);
 
-        void loadTextures(float main_window_size);
-        void setPosition(std::string fen_string, float main_window_size);
+        void loadTextures(sf::Vector2u main_window_size);
+        void setPosition(std::string fen_string);
+        void windowResized(sf::Vector2u new_size);
         bool isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size);
         void leftButtonPressed();
         void leftButtonReleased();

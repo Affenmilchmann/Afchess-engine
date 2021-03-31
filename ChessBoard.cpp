@@ -19,6 +19,8 @@ std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_s
         y = 8 - y;
     }
 
+	std::cout << std::string(1, x) + std::to_string(y) << "\n";
+
     return std::string(1, x) + std::to_string(y);
 }
 
@@ -31,12 +33,14 @@ void ChessBoard::mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos) {
 }
 
 void ChessBoard::draw(sf::RenderWindow *window) {
-
-
     window->draw(board_sprite);
     for (auto it = pieces.begin(); it != pieces.end(); ++it) {
 		it->draw(window);
 	}
+}
+
+void ChessBoard::windowResized(sf::Vector2u new_size) {
+	main_window_size = new_size;
 }
 
 void ChessBoard::leftButtonPressed() {
@@ -63,13 +67,15 @@ bool ChessBoard::isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {
         }
 	}
 
-    pointed_piece = nullptr;
+	if (pointed_piece != nullptr) {
+		std::cout << "Piece sign: None" << "\n";
+		pointed_piece = nullptr;
+	}
     return false;
 }
 
-void ChessBoard::setPosition(std::string fen_string, float main_window_size) {
+void ChessBoard::setPosition(std::string fen_string) {
     int curr_row = 7, curr_col = 0;
-	int board_size = main_window_size;
 	for (int i = 0; i < (int)fen_string.length(); i++) {
 		std::string position = "a1";
 		std::string type = "ZZ";
@@ -101,20 +107,28 @@ void ChessBoard::setPosition(std::string fen_string, float main_window_size) {
 
 		curr_col += 1;
 
-		pieces.push_back(Piece(type, piece_textures[type], position, type[0] == 'w', board_size));
+		pieces.push_back(Piece(type, piece_textures[type], position, type[0] == 'w', main_window_size));
 
         std::cout << type << "  " << position << "\n";
 	}
 }
 
-void ChessBoard::loadTextures(float main_window_size) {
+void ChessBoard::loadTextures(sf::Vector2u main_window_size) {
+	this->main_window_size = main_window_size;
+
+	//////Board
+
     pieces_img.loadFromFile("img/ChessPiecesArray.png");
 	board_texture.loadFromFile("img/board_c.png");
+
+    float scale_factor_x = ((float)main_window_size.x / board_texture.getSize().x);
+	float scale_factor_y = ((float)main_window_size.y / board_texture.getSize().y);
+
 	board_sprite.setTexture(board_texture);
 
-    float scale_factor = (main_window_size / board_texture.getSize().x);
+	board_sprite.setScale(scale_factor_x, scale_factor_y);
 
-	board_sprite.setScale(scale_factor, scale_factor);
+	///////Pieces
 
 	piece_textures["bQ"] = new sf::Texture();
 	piece_textures["bQ"]->loadFromImage(pieces_img, sf::IntRect(0, 0, 60, 60));

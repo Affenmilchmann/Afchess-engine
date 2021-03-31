@@ -2,8 +2,8 @@
 #include "iostream"
 #include "math.h"
 
-ChessGraphics::ChessGraphics(std::string fen_string, int size) {
-	main_window.create(sf::VideoMode(size, size), "AfChess");
+ChessGraphics::ChessGraphics(std::string fen_string, sf::Vector2u size) {
+	main_window.create(sf::VideoMode(size.x, size.y), "AfChess");
 	main_window.setFramerateLimit(30);
 
 	arrow.loadFromSystem(sf::Cursor::Arrow);
@@ -12,8 +12,8 @@ ChessGraphics::ChessGraphics(std::string fen_string, int size) {
 	mouse_pos_pointer.setRadius(4);
 	mouse_pos_pointer.setFillColor(sf::Color::Green);
 
-	chess_board.loadTextures(main_window.getSize().x);
-	chess_board.setPosition(fen_string, main_window.getSize().x);
+	chess_board.loadTextures(main_window.getSize());
+	chess_board.setPosition(fen_string);
 }
 
 
@@ -35,16 +35,18 @@ void ChessGraphics::mainLoop() {
 				
 				case sf::Event::MouseButtonPressed:
 					if (ev.mouseButton.button == sf::Mouse::Left) {
-						std::cout << "Right pressed!\n";
 						chess_board.leftButtonPressed();
 					}
 					break;
 
 				case sf::Event::MouseButtonReleased:
 					if (ev.mouseButton.button == sf::Mouse::Left) {
-						std::cout << "Right released!\n";
 						chess_board.leftButtonReleased();
 					}
+					break;
+
+				case sf::Event::Resized:
+					chess_board.windowResized(sf::Vector2u(ev.size.width, ev.size.height));
 					break;
 				}
 			}	
