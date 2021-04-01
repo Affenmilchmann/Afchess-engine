@@ -18,7 +18,9 @@ class Piece {
 
         void windowResized(sf::Vector2u new_size);
         bool isColliding(std::string char_coords);
-        void pieceIsBeingMoved(sf::Vector2i position);
+        void pieceIsBeingMoved(sf::Vector2i position, sf::Vector2u window_size);
+        void moveTo(std::string position, sf::Vector2u window_size, sf::Vector2i mouse_pos);
+        void flip(sf::Vector2u window_size);
 
         std::string getCharCoords();
         sf::Vector2i getNumCoords();

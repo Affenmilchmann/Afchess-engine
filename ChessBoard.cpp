@@ -1,6 +1,9 @@
 #include "ChessBoard.hpp"
 
-ChessBoard::ChessBoard() { blacks_move = false; }
+ChessBoard::ChessBoard() { 
+	blacks_move = false; 
+	pointed_piece = nullptr;
+}
 
 char toUpper(char inp) {
 	return (char)(inp - 32);
@@ -13,10 +16,10 @@ std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_s
     }
 
     char x = 'a' + (8 * coords.x / window_size.x);
-    int y = (8 * coords.y / window_size.y);
+    int y = 1 + (8 * coords.y / window_size.y);
 
     if (!blacks_move) {
-        y = 8 - y;
+        y = 9 - y;
     }
 
 	std::cout << std::string(1, x) + std::to_string(y) << "\n";
@@ -26,7 +29,7 @@ std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_s
 
 void ChessBoard::mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos) {
 	if (is_right_button_pressed && pointed_piece != nullptr) {
-		pointed_piece->pieceIsBeingMoved(mouse_pos);
+		pointed_piece->pieceIsBeingMoved(mouse_pos, main_window_size);
 	}
 	
 	draw(window);
@@ -47,8 +50,24 @@ void ChessBoard::leftButtonPressed() {
 	is_right_button_pressed = true;
 }
 
-void ChessBoard::leftButtonReleased() {
+void ChessBoard::leftButtonReleased(sf::Vector2i mouse_pos) {
 	is_right_button_pressed = false;
+
+	if (pointed_piece != nullptr) {
+		std::cout << ":)\n";
+		pointed_piece->moveTo(getCharCoords(mouse_pos, main_window_size), main_window_size, mouse_pos);
+
+		pointed_piece = nullptr;
+	}
+}
+
+void ChessBoard::flip() {
+	std::cout << "Flip!!!\n";
+	blacks_move = !blacks_move;
+
+	for (auto it = pieces.begin(); it != pieces.end(); ++it) {
+		it->flip(main_window_size);
+	}
 }
 
 bool ChessBoard::isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {

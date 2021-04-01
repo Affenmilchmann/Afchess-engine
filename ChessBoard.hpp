@@ -33,5 +33,6 @@ class ChessBoard {
         void windowResized(sf::Vector2u new_size);
         bool isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size);
         void leftButtonPressed();
-        void leftButtonReleased();
+        void leftButtonReleased(sf::Vector2i mouse_pos);
+        void flip();
 };

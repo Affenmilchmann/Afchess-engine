@@ -33,8 +33,27 @@ void Piece::windowResized(sf::Vector2u new_size) {
     sprite.setScale(scale_factor_x, scale_factor_y);
 }
 
-void Piece::pieceIsBeingMoved(sf::Vector2i position) {
-    sprite.setPosition(position.x, position.y);
+void Piece::moveTo(std::string position, sf::Vector2u window_size, sf::Vector2i mouse_pos) {
+    this->position = position;
+    
+    int size_x = window_size.x / 8;
+    int size_y = window_size.y / 8;
+
+    sprite.setPosition(mouse_pos.x - mouse_pos.x % size_x, mouse_pos.y - mouse_pos.y % size_y);
+}
+
+void Piece::flip(sf::Vector2u window_size) {
+    sf::Vector2f pos = sprite.getPosition();
+
+    sprite.setPosition(pos.x, (7.f / 8) * window_size.y - pos.y);
+}
+
+void Piece::pieceIsBeingMoved(sf::Vector2i position, sf::Vector2u window_size) {
+    //window_size.y / 8 is piece size and window_size.y / 16 is half of this size
+    sprite.setPosition(
+                        position.x - window_size.x / 16, 
+                        position.y - window_size.y / 16
+                        );
 }
 
 bool Piece::isColliding(std::string char_coords) {

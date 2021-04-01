@@ -41,12 +41,18 @@ void ChessGraphics::mainLoop() {
 
 				case sf::Event::MouseButtonReleased:
 					if (ev.mouseButton.button == sf::Mouse::Left) {
-						chess_board.leftButtonReleased();
+						chess_board.leftButtonReleased(mouse_pos);
 					}
 					break;
 
 				case sf::Event::Resized:
 					chess_board.windowResized(sf::Vector2u(ev.size.width, ev.size.height));
+					break;
+
+				case  sf::Event::KeyPressed:
+					if (ev.key.code == sf::Keyboard::F) {
+						chess_board.flip();
+					}
 					break;
 				}
 			}	
