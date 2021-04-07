@@ -33,13 +33,26 @@ void Piece::windowResized(sf::Vector2u new_size) {
     sprite.setScale(scale_factor_x, scale_factor_y);
 }
 
-void Piece::moveTo(std::string position, sf::Vector2u window_size, sf::Vector2i mouse_pos) {
+bool Piece::moveTo(std::string position, sf::Vector2u window_size, sf::Vector2i mouse_pos) {
+    if (this->position == position) 
+        return false;
+
     this->position = position;
     
     int size_x = window_size.x / 8;
     int size_y = window_size.y / 8;
 
     sprite.setPosition(mouse_pos.x - mouse_pos.x % size_x, mouse_pos.y - mouse_pos.y % size_y);
+
+    return true;
+}
+
+void Piece::moveToItsCoords(sf::Vector2u window_size, bool blacks_move) {
+    sf::Vector2i own_num_coords = getNumCoords(window_size);
+    sprite.setPosition(own_num_coords.x, own_num_coords.y);
+
+    if (!blacks_move)
+        flip(window_size);
 }
 
 void Piece::flip(sf::Vector2u window_size) {
@@ -71,6 +84,16 @@ std::string Piece::getCharCoords() {
 sf::Vector2i Piece::getNumCoords() {
     int x = (int)(position[0]) - (int)'a';
     int y = (int)(position[1]) - (int)'1';
+
+    return sf::Vector2i(x, y);
+}
+
+sf::Vector2i Piece::getNumCoords(sf::Vector2u window_size) {
+    int x = (int)(position[0]) - (int)'a';
+    int y = (int)(position[1]) - (int)'1';
+
+    x = window_size.x * x / 8;
+    y = window_size.y * y / 8;
 
     return sf::Vector2i(x, y);
 }

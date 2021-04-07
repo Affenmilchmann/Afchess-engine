@@ -16,7 +16,7 @@ class ChessBoard {
         sf::Vector2u main_window_size;
         Piece* pointed_piece;
 
-        bool is_right_button_pressed;
+        bool is_left_button_pressed;
 
         void draw(sf::RenderWindow *window);
         std::string getCharCoords(sf::Vector2i coords, sf::Vector2u window_size);
@@ -25,6 +25,8 @@ class ChessBoard {
         ChessBoard();
 
         bool blacks_move;
+        bool is_flipped;
+        bool do_flip_on_move;
 
         void mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos);
 

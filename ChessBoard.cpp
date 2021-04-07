@@ -2,6 +2,8 @@
 
 ChessBoard::ChessBoard() { 
 	blacks_move = false; 
+	is_flipped = false;
+	do_flip_on_move = true;
 	pointed_piece = nullptr;
 }
 
@@ -18,17 +20,18 @@ std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_s
     char x = 'a' + (8 * coords.x / window_size.x);
     int y = 1 + (8 * coords.y / window_size.y);
 
-    if (!blacks_move) {
+    if (!is_flipped) {
         y = 9 - y;
     }
 
-	std::cout << std::string(1, x) + std::to_string(y) << "\n";
+	//std::cout << std::string(1, x) + std::to_string(y) << "\n";
 
     return std::string(1, x) + std::to_string(y);
 }
 
 void ChessBoard::mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos) {
-	if (is_right_button_pressed && pointed_piece != nullptr) {
+	if (is_left_button_pressed && pointed_piece != nullptr) {
+
 		pointed_piece->pieceIsBeingMoved(mouse_pos, main_window_size);
 	}
 	
@@ -47,31 +50,42 @@ void ChessBoard::windowResized(sf::Vector2u new_size) {
 }
 
 void ChessBoard::leftButtonPressed() {
-	is_right_button_pressed = true;
+	is_left_button_pressed = true;
 }
 
 void ChessBoard::leftButtonReleased(sf::Vector2i mouse_pos) {
-	is_right_button_pressed = false;
+	is_left_button_pressed = false;
 
 	if (pointed_piece != nullptr) {
-		std::cout << ":)\n";
-		pointed_piece->moveTo(getCharCoords(mouse_pos, main_window_size), main_window_size, mouse_pos);
+		if (pointed_piece->is_white == !blacks_move) {
+			//if piece changed its tile
+			if (pointed_piece->moveTo(getCharCoords(mouse_pos, main_window_size), main_window_size, mouse_pos)) {
+				pointed_piece = nullptr;	
+				blacks_move = !blacks_move;
 
-		pointed_piece = nullptr;
+				std::cout << blacks_move << " <- blacks move?\n";
+				
+				if (do_flip_on_move)
+					flip();
+			}
+			else 
+				pointed_piece->moveToItsCoords(main_window_size, is_flipped);
+		}
+		else 
+			pointed_piece->moveToItsCoords(main_window_size, is_flipped);
 	}
 }
 
 void ChessBoard::flip() {
 	std::cout << "Flip!!!\n";
-	blacks_move = !blacks_move;
-
+	is_flipped = !is_flipped;
 	for (auto it = pieces.begin(); it != pieces.end(); ++it) {
 		it->flip(main_window_size);
 	}
 }
 
 bool ChessBoard::isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {
-	if (is_right_button_pressed) 
+	if (is_left_button_pressed) 
 		return false;
 
     std::string char_coords = getCharCoords(mouse_pos, window_size);
