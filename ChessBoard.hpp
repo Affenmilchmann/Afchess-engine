@@ -17,6 +17,9 @@ class ChessBoard {
         Piece* pointed_piece;
 
         bool is_left_button_pressed;
+        bool blacks_move;
+        bool is_flipped;
+        bool do_flip_on_move;
 
         void draw(sf::RenderWindow *window);
         std::string getCharCoords(sf::Vector2i coords, sf::Vector2u window_size);
@@ -24,17 +27,16 @@ class ChessBoard {
     public:
         ChessBoard();
 
-        bool blacks_move;
-        bool is_flipped;
-        bool do_flip_on_move;
+        void showStats();
 
         void mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos);
 
         void loadTextures(sf::Vector2u main_window_size);
         void setPosition(std::string fen_string);
         void windowResized(sf::Vector2u new_size);
-        bool isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size);
+        bool isMouseColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size);
         void leftButtonPressed();
         void leftButtonReleased(sf::Vector2i mouse_pos);
         void flip();
+        void doFlipOnMove();
 };

@@ -58,12 +58,32 @@ void ChessBoard::leftButtonReleased(sf::Vector2i mouse_pos) {
 
 	if (pointed_piece != nullptr) {
 		if (pointed_piece->is_white == !blacks_move) {
+			std::string tile_move_to = getCharCoords(mouse_pos, main_window_size);
+
+			for (int i = 0; i < pieces.size(); i++) {
+				//if coords are matching
+				if (pieces[i].getCharCoords() == tile_move_to) {
+					//if its enemy`s piece then delete it
+					if (pieces[i].is_white == blacks_move) {
+						pieces.erase(pieces.begin() + i);
+						std::cout << "Takes!\n";
+					}
+					//if own piece, then just dont let move
+					else {
+						std::cout << "Friendly fire!\n";
+						pointed_piece->moveToItsCoords(main_window_size, is_flipped);
+						return;
+					}
+				}
+			}	
+
 			//if piece changed its tile
-			if (pointed_piece->moveTo(getCharCoords(mouse_pos, main_window_size), main_window_size, mouse_pos)) {
+			if (pointed_piece->moveTo(tile_move_to, main_window_size, mouse_pos)) {
+
 				pointed_piece = nullptr;	
 				blacks_move = !blacks_move;
 
-				std::cout << blacks_move << " <- blacks move?\n";
+				//std::cout << blacks_move << " <- blacks move?\n";
 				
 				if (do_flip_on_move)
 					flip();
@@ -84,14 +104,19 @@ void ChessBoard::flip() {
 	}
 }
 
-bool ChessBoard::isColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {
+void ChessBoard::doFlipOnMove() {
+	std::cout << "Auto flip changed!!!\n";
+	do_flip_on_move = !do_flip_on_move;
+}
+
+bool ChessBoard::isMouseColliding(sf::Vector2i mouse_pos, sf::Vector2u window_size) {
 	if (is_left_button_pressed) 
 		return false;
 
     std::string char_coords = getCharCoords(mouse_pos, window_size);
 
     for (int i = 0; i < pieces.size(); i++) {
-		if (pieces[i].isColliding(char_coords)) {
+		if (pieces[i].isMouseColliding(char_coords)) {
 			if (pointed_piece != &pieces[i]) {
             	pointed_piece = &pieces[i];
 				std::cout << "Piece sign: " << pointed_piece->type << "\n";
@@ -192,4 +217,16 @@ void ChessBoard::loadTextures(sf::Vector2u main_window_size) {
 	piece_textures["bP"]->loadFromImage(pieces_img, sf::IntRect(300, 0, 60, 60));
 	piece_textures["wP"] = new sf::Texture();
 	piece_textures["wP"]->loadFromImage(pieces_img, sf::IntRect(300, 60, 60, 60));
+}
+
+void ChessBoard::showStats() {
+	int white = 0, black = 0;
+
+	for (auto it = pieces.begin(); it != pieces.end(); ++it) {
+		white += it->is_white;
+		black += !it->is_white;
+	}
+
+	std::cout << "Whites pieces amount: " << white << "\n";
+	std::cout << "Blacks pieces amount: " << black << "\n";
 }

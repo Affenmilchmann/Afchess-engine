@@ -4,7 +4,7 @@
 
 ChessGraphics::ChessGraphics(std::string fen_string, sf::Vector2u size) {
 	main_window.create(sf::VideoMode(size.x, size.y), "AfChess");
-	main_window.setFramerateLimit(30);
+	main_window.setFramerateLimit(10);
 
 	arrow.loadFromSystem(sf::Cursor::Arrow);
 	hand.loadFromSystem(sf::Cursor::Hand);
@@ -50,8 +50,17 @@ void ChessGraphics::mainLoop() {
 					break;
 
 				case  sf::Event::KeyPressed:
-					if (ev.key.code == sf::Keyboard::F) {
+					switch (ev.key.code)
+					{
+					case sf::Keyboard::F:
 						chess_board.flip();
+						break;
+					case sf::Keyboard::D:
+						chess_board.doFlipOnMove();
+						break;
+					case sf::Keyboard::S:
+						chess_board.showStats();;
+						break;
 					}
 					break;
 				}
@@ -68,7 +77,7 @@ void ChessGraphics::mouseHandler() {
 	/*mouse_pos_pointer.setPosition(mouse_pos.x - 4, mouse_pos.y - 4);
 	main_window.draw(mouse_pos_pointer);*/
 	
-	if (chess_board.isColliding(mouse_pos, main_window.getSize()))
+	if (chess_board.isMouseColliding(mouse_pos, main_window.getSize()))
 		main_window.setMouseCursor(hand);
 	else
 		main_window.setMouseCursor(arrow);

@@ -69,7 +69,7 @@ void Piece::pieceIsBeingMoved(sf::Vector2i position, sf::Vector2u window_size) {
                         );
 }
 
-bool Piece::isColliding(std::string char_coords) {
+bool Piece::isMouseColliding(std::string char_coords) {
     return char_coords == position;
 }
 
