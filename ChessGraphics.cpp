@@ -4,7 +4,7 @@
 
 ChessGraphics::ChessGraphics(std::string fen_string, sf::Vector2u size) {
 	main_window.create(sf::VideoMode(size.x, size.y), "AfChess");
-	main_window.setFramerateLimit(10);
+	main_window.setFramerateLimit(30);
 
 	arrow.loadFromSystem(sf::Cursor::Arrow);
 	hand.loadFromSystem(sf::Cursor::Hand);

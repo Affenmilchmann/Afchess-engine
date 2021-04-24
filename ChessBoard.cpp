@@ -12,6 +12,9 @@ char toUpper(char inp) {
 }
 
 std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_size) {
+	// This func returns char coords like f1, a3 from coords and window size
+	// For an example, if board is flipped (white are on the top) ((keep in mind that [0, 0] is in the top left corner))
+	// window size is 800x800 and coords are [40, 110] then return will be 'a2'
     if (coords.x < 0 || coords.y < 0 || 
         coords.x > window_size.x || coords.y > window_size.y) {
             return "Off";
@@ -30,8 +33,8 @@ std::string ChessBoard::getCharCoords(sf::Vector2i coords, sf::Vector2u window_s
 }
 
 void ChessBoard::mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos) {
+	//this is called from ChessGraphics class every tick
 	if (is_left_button_pressed && pointed_piece != nullptr) {
-
 		pointed_piece->pieceIsBeingMoved(mouse_pos, main_window_size);
 	}
 	
@@ -39,6 +42,7 @@ void ChessBoard::mainLoop(sf::RenderWindow *window, sf::Vector2i mouse_pos) {
 }
 
 void ChessBoard::draw(sf::RenderWindow *window) {
+	//draws board and pieces
     window->draw(board_sprite);
     for (auto it = pieces.begin(); it != pieces.end(); ++it) {
 		it->draw(window);
@@ -54,6 +58,7 @@ void ChessBoard::leftButtonPressed() {
 }
 
 void ChessBoard::leftButtonReleased(sf::Vector2i mouse_pos) {
+	//this func moves piece after button release. NEEDS TO BE REWRITTEN! This is awful
 	is_left_button_pressed = false;
 
 	if (pointed_piece != nullptr) {
@@ -97,6 +102,7 @@ void ChessBoard::leftButtonReleased(sf::Vector2i mouse_pos) {
 }
 
 void ChessBoard::flip() {
+	//do flip. And mirror all pieces
 	std::cout << "Flip!!!\n";
 	is_flipped = !is_flipped;
 	for (auto it = pieces.begin(); it != pieces.end(); ++it) {
